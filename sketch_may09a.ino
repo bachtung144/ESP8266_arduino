@@ -10,7 +10,7 @@ const uint16_t mqtt_port = 1883; //Port của CloudMQTT TCP
 const char *mqtt_username = "bachtung1234";
 const char *mqtt_password = "Bachtung1234";
 
-const int relayInput = 5;
+//const int relayInput = 2;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -21,7 +21,13 @@ void setup()
   setup_wifi();
   client.setServer(mqtt_server, mqtt_port); 
   client.setCallback(callback);
-  pinMode (relayInput, OUTPUT); //initialAze pin as OUTPUT
+  pinMode (5, OUTPUT); //initialAze pin as OUTPUT
+  pinMode (4, OUTPUT);
+  pinMode (0, OUTPUT);
+  pinMode (2, OUTPUT);
+  pinMode (14, OUTPUT);
+  pinMode (12, OUTPUT);
+  pinMode (13, OUTPUT);
 }
 // Hàm kết nối wifi
 void setup_wifi() 
@@ -56,23 +62,21 @@ void callback(char* topic, byte* payload, unsigned int length)
   StaticJsonDocument <256> doc;
   deserializeJson(doc,payload);
   const char* chipId = doc["chipId"];
-  const char* device = doc["device"];
-  const char* status = doc["status"];
+  int relayInput = doc["gpio"];
+  int status = doc["status"];
   
   char buffer[33];
   ultoa(ESP.getChipId(), buffer, 10);
   if(strcmp(buffer, chipId) == 0) 
   {
-    if (strcmp(status, "0") == 0)
+    if (status == 0)
       {
         digitalWrite(relayInput, HIGH);
-        Serial.print("hello1");
-        }
-    if (strcmp(status, "1") == 0)
-    {
+      }
+    if (status == 1)
+      {
         digitalWrite(relayInput, LOW);
-        Serial.print("hello2");
-        }
+      }
   }
   
 //  Serial.println(buffer);
