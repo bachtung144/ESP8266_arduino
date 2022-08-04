@@ -79,11 +79,6 @@ void callback(char* topic, byte* payload, unsigned int length)
       }
   }
   
-//  Serial.println(buffer);
-//  Serial.println(chipId);
-//  Serial.println(device);
-//  Serial.println(status);
-  
   Serial.println();
 }
 // Hàm reconnec a1t thực hiện kết nối lại khi mất kết nối với MQTT Broker
@@ -96,7 +91,7 @@ void reconnect()
     if (client.connect(client_id.c_str()))  //kết nối vào broker
     {
       Serial.println("connect to mqtt");
-      client.subscribe("IoT47_MQTT_Test"); //đăng kí nhận dữ liệu từ topic IoT47_MQTT_Test
+      client.subscribe("IoT_MQTT_Control"); 
     }
     else 
     {
